@@ -1,0 +1,29 @@
+.search-filter {
+  max-width: 1200px;
+  margin: 0 auto 30px;
+  display: flex;
+  gap: 15px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.search-filter input {
+  width: 220px;
+  padding: 12px 15px;
+  border: 1px solid #d1d5db;
+  border-radius: 10px;
+  outline: none;
+  font-size: 14px;
+  background: white;
+  transition: all 0.25s ease;
+  color: black;
+}
+
+.search-filter input:focus {
+  border-color: #2563eb;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12);
+}
+
+.search-filter input::placeholder {
+  color: #9ca3af;
+}
