@@ -21,16 +21,23 @@ function HotelDetails() {
         const data = await response.json();
 
         if (data.success) {
-          setHotel(data.hotel);
+          const hotelData = data.hotel;
+
+          let imageUrl = hotelData.image;
+
+          if (imageUrl && imageUrl.startsWith("/")) {
+            imageUrl = `${API_BASE_URL}${imageUrl}`;
+          }
+
+          setHotel({
+            ...hotelData,
+            image: imageUrl,
+          });
         } else {
           setHotel(null);
         }
       } catch (error) {
-        console.error(
-          "GET HOTEL ERROR:",
-          error
-        );
-
+        console.error("GET HOTEL ERROR:", error);
         setHotel(null);
       }
     };
@@ -78,8 +85,6 @@ function HotelDetails() {
 
       <div className="hotel-details-container">
 
-        {}
-
         <button
           type="button"
           className="back-button"
@@ -87,8 +92,6 @@ function HotelDetails() {
         >
           ← Back to Hotels
         </button>
-
-        {}
 
         <div className="details-heading">
 
@@ -99,8 +102,6 @@ function HotelDetails() {
           </p>
 
         </div>
-
-        {}
 
         <div className="hotel-details-card">
 
@@ -160,19 +161,23 @@ function HotelDetails() {
               <div className="coordinates">
 
                 <div>
+
                   <span>Latitude</span>
 
                   <strong>
                     {hotel.latitude}
                   </strong>
+
                 </div>
 
                 <div>
+
                   <span>Longitude</span>
 
                   <strong>
                     {hotel.longitude}
                   </strong>
+
                 </div>
 
               </div>
