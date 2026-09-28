@@ -1,7 +1,5 @@
 import { useNavigate } from "react-router-dom";
 
-const BACKEND_URL = "https://hotel-backend-ng93.onrender.com";
-
 function HotelCard({ hotel, onDelete }) {
   const navigate = useNavigate();
 
@@ -27,7 +25,7 @@ function HotelCard({ hotel, onDelete }) {
       <div className="hotel-image-container">
         {hotel.image ? (
           <img
-            src={`${BACKEND_URL}${hotel.image}`}
+            src={hotel.image}
             alt={hotel.title}
             className="hotel-image"
           />
