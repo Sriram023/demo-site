@@ -1,25 +1,23 @@
 const express = require("express");
 const multer = require("multer");
-const path = require("path");
-const fs = require("fs");
+const { v2: cloudinary } = require("cloudinary");
+const { CloudinaryStorage } = require("multer-storage-cloudinary");
+
 const db = require("./db");
 
 const router = express.Router();
 
-const uploadFolder = path.join(__dirname, "uploads", "hotels");
+cloudinary.config({
+  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+  api_key: process.env.CLOUDINARY_API_KEY,
+  api_secret: process.env.CLOUDINARY_API_SECRET,
+});
 
-if (!fs.existsSync(uploadFolder)) {
-  fs.mkdirSync(uploadFolder, { recursive: true });
-}
-
-const storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    cb(null, uploadFolder);
-  },
-
-  filename: (req, file, cb) => {
-    const fileName = Date.now() + "-" + file.originalname;
-    cb(null, fileName);
+const storage = new CloudinaryStorage({
+  cloudinary: cloudinary,
+  params: {
+    folder: "hotel-images",
+    allowed_formats: ["jpg", "jpeg", "png", "webp"],
   },
 });
 
@@ -77,6 +75,7 @@ router.get("/:id", async (req, res) => {
   }
 });
 
+
 router.post("/", upload.single("image"), async (req, res) => {
   try {
     const {
@@ -130,7 +129,7 @@ router.post("/", upload.single("image"), async (req, res) => {
       });
     }
 
-    const image = `/uploads/hotels/${req.file.filename}`;
+    const image = req.file.path;
 
     const result = await db.query(
       `INSERT INTO hotels
@@ -189,7 +188,7 @@ router.put("/:id", upload.single("image"), async (req, res) => {
     let image = oldHotel.rows[0].image;
 
     if (req.file) {
-      image = `/uploads/hotels/${req.file.filename}`;
+      image = req.file.path;
     }
 
     const result = await db.query(
@@ -228,6 +227,7 @@ router.put("/:id", upload.single("image"), async (req, res) => {
     });
   }
 });
+
 
 router.delete("/:id", async (req, res) => {
   try {
