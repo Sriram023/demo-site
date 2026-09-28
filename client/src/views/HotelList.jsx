@@ -1,4 +1,3 @@
-
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
@@ -16,6 +15,7 @@ import SuccessPopup from "../components/SuccessPopup";
 import "./HotelList.css";
 
 const API_BASE_URL = import.meta.env.VITE_API_URL;
+const BACKEND_URL = new URL(API_BASE_URL).origin;
 
 function HotelList() {
   const navigate = useNavigate();
@@ -61,23 +61,18 @@ function HotelList() {
             let imageUrl = "";
 
             if (hotel.image) {
-              
               if (
                 hotel.image.startsWith("http")
               ) {
                 imageUrl = hotel.image;
-              }
-
-              else if (
+              } else if (
                 hotel.image.startsWith("/")
               ) {
                 imageUrl =
-                  `${API_BASE_URL}${hotel.image}`;
-              }
-
-              else {
+                  `${BACKEND_URL}${hotel.image}`;
+              } else {
                 imageUrl =
-                  `${API_BASE_URL}/${hotel.image}`;
+                  `${BACKEND_URL}/${hotel.image}`;
               }
             }
 
@@ -273,7 +268,6 @@ function HotelList() {
     );
   }
 
-
   return (
     <div className="hotel-list-page">
       <div className="hotel-header">
@@ -297,7 +291,6 @@ function HotelList() {
         </button>
       </div>
 
-     
       {error && (
         <div className="error-message">
           <strong>Error:</strong>{" "}
@@ -305,7 +298,6 @@ function HotelList() {
         </div>
       )}
 
-      
       <SearchFilter
         searchTerm={searchTerm}
         setSearchTerm={setSearchTerm}
@@ -315,7 +307,6 @@ function HotelList() {
         setMaxPrice={setMaxPrice}
       />
 
-      
       <p className="hotel-count">
         {filteredHotels.length} hotel
         {filteredHotels.length !== 1
@@ -324,7 +315,6 @@ function HotelList() {
         found
       </p>
 
-      
       {currentHotels.length > 0 ? (
         <div className="hotel-grid">
           {currentHotels.map(
@@ -351,7 +341,6 @@ function HotelList() {
         </div>
       )}
 
-      
       {totalPages > 1 && (
         <Pagination
           currentPage={currentPage}
